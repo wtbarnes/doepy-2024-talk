@@ -2,6 +2,8 @@
 slides.html
 slides.ipynb
 slides_files
+_extensions/
+data/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
