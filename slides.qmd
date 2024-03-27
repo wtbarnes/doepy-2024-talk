@@ -49,17 +49,7 @@ os.environ["PARFIVE_HIDE_PROGRESS"] = "True"
 :::
 ::::
 
-# <span style="color:white;">What is solar physics?</span> {background-video="https://svs.gsfc.nasa.gov/vis/a030000/a030000/a030072/heliophysics_fleet_capture_erup_cme_1280x720.mp4" background-video-loop="true" background-video-muted="true"}
-
-::: {.notes}
-- Astronomy/astrophysics of the Sun
-- Can study our star in greater detail than any other
-- Impact on space weather on the earth
-- A laboratory for astrophysics, fundamental plasma physics, and more!
-- Primary focus is the solar atmosphere
-:::
-
-# {background-image="static/corona_image.png"}
+# <span style="color:white;">What is solar physics?</span> {background-image="static/corona_image.png"}
 
 ::: footer
 Image Credit: [NASA APOD/Reinhold Wittich](https://apod.nasa.gov/apod/ap230516.html)
@@ -73,6 +63,16 @@ Image Credit: [NASA APOD/Reinhold Wittich](https://apod.nasa.gov/apod/ap230516.h
 - But why? how?
 - Why is the Corona So Hot?
 - To solve this, we don't need to wait for eclipses anymore...(lead into EUV observations)
+:::
+
+# {background-video="https://svs.gsfc.nasa.gov/vis/a030000/a030000/a030072/heliophysics_fleet_capture_erup_cme_1280x720.mp4" background-video-loop="true" background-video-muted="true"}
+
+::: {.notes}
+- Astronomy/astrophysics of the Sun
+- Can study our star in greater detail than any other
+- Impact on space weather on the earth
+- A laboratory for astrophysics, fundamental plasma physics, and more!
+- Primary focus is the solar atmosphere
 :::
 
 # { background-video="https://api.helioviewer.org/cache/movies/2023/07/10/1SDn5/2018_05_29_00_07_33_2018_05_30_00_02_45_AIA_171.mp4" background-video-loop="true" background-video-muted="true"}
