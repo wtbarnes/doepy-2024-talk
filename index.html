@@ -510,9 +510,9 @@ Will Barnes
 <div class="column" style="width:45%;">
 <div>
 <ul>
+<li class="fragment">Ask a “physics” question</li>
 <li class="fragment">Identify an event of interest</li>
-<li class="fragment">Combine data to answer a question</li>
-<li class="fragment">Where are the data?
+<li class="fragment">Combine data to answer a question
 <ul>
 <li class="fragment"><i class="fa-solid fa-magnifying-glass fa-lg" aria-label="magnifying-glass"></i> Search for data</li>
 <li class="fragment"><i class="fa-solid fa-download fa-lg" aria-label="download"></i> Download data</li>
@@ -560,14 +560,14 @@ Will Barnes
 <li class="fragment"><strong>Cons:</strong>
 <ul>
 <li class="fragment">Proprietary language, license fees</li>
-<li class="fragment">No concept of a namespaces in IDL</li>
+<li class="fragment">Development is not coordinated</li>
 <li class="fragment">No tests or documentation</li>
 <li class="fragment">No clear path to contribute</li>
 </ul></li>
 </ul>
 </div>
 </div><div class="column" style="width:40%;">
-<p><img data-src="static/ssw_screenshot.png"></p>
+<p><img data-src="static/ssw_screenshot.png" class="fragment"></p>
 </div>
 </div>
 </section>
@@ -595,164 +595,11 @@ Will Barnes
 <section id="sunpy-solar-data-analysis-in-python-1" class="slide level2" data-background-image="static/tour.svg" data-background-size="90%">
 <h2><code>sunpy</code>: Solar Data Analysis in Python</h2>
 </section>
-<section id="searching-for-data-with-sunpy" class="slide level2">
-<h2>Searching for Data with <code>sunpy</code></h2>
-<div class="cell columns column-output-location" data-execution_count="2">
-<div class="column">
-<div class="sourceCode cell-code" id="annotated-cell-1"><pre class="sourceCode numberSource python code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode python"><span id="annotated-cell-1-1"><a href="#annotated-cell-1-1"></a><span class="im">from</span> sunpy.net <span class="im">import</span> Fido, attrs <span class="im">as</span> a</span>
-<span id="annotated-cell-1-2"><a href="#annotated-cell-1-2"></a><span class="im">import</span> astropy.units <span class="im">as</span> u</span>
-<span id="annotated-cell-1-3"><a href="#annotated-cell-1-3"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-1" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-1-4" class="code-annotation-target"><a href="#annotated-cell-1-4"></a>query <span class="op">=</span> Fido.search(</span>
-<span id="annotated-cell-1-5"><a href="#annotated-cell-1-5"></a>  a.Time(<span class="st">'2018-05-29 18:00'</span>, <span class="st">'2018-05-29 18:00:10'</span>),</span>
-<span id="annotated-cell-1-6"><a href="#annotated-cell-1-6"></a>  a.Wavelength(<span class="dv">171</span><span class="op">*</span>u.angstrom),</span>
-<span id="annotated-cell-1-7"><a href="#annotated-cell-1-7"></a>  a.Instrument.aia</span>
-<span id="annotated-cell-1-8"><a href="#annotated-cell-1-8"></a>)</span>
-<span id="annotated-cell-1-9"><a href="#annotated-cell-1-9"></a><span class="bu">print</span>(query)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column fragment">
-<div class="cell-annotation">
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-1" data-target-annotation="1">1</dt>
-<dd>
-<span data-code-cell="annotated-cell-1" data-code-lines="4,5,6,7,8" data-code-annotation="1">Search remote repository for AIA 171 Å images between 18:00 and 18:10 on May 29 2018.</span>
-</dd>
-</dl>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Results from 1 Provider:
 
-1 Results from the VSOClient:
-Source: http://vso.stanford.edu/cgi-bin/search
-Total estimated size: 67.789 Mbyte
 
-       Start Time               End Time        Source ... Extent Type   Size  
-                                                       ...              Mibyte 
------------------------ ----------------------- ------ ... ----------- --------
-2018-05-29 18:00:09.000 2018-05-29 18:00:10.000    SDO ...    FULLDISK 64.64844
 
-</code></pre>
-</div>
-</div>
-</div>
-<div class="cell columns column-output-location" data-execution_count="3">
-<div class="column">
-<div class="sourceCode cell-code" id="annotated-cell-2"><pre class="sourceCode numberSource python code-annotation-code number-lines code-with-copy code-annotated"><code class="sourceCode python"><a class="code-annotation-anchor" data-target-cell="annotated-cell-2" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-2-1" class="code-annotation-target"><a href="#annotated-cell-2-1"></a>files <span class="op">=</span> Fido.fetch(query, path<span class="op">=</span><span class="st">'data/</span><span class="sc">{instrument}</span><span class="st">'</span>)</span>
-<span id="annotated-cell-2-2"><a href="#annotated-cell-2-2"></a><span class="bu">print</span>(files)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column fragment">
-<div class="cell-annotation">
-<dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-2" data-target-annotation="2">2</dt>
-<dd>
-<span data-code-cell="annotated-cell-2" data-code-lines="1" data-code-annotation="2">Download all FITS files corresponding to this search result to <code>data/AIA</code>.</span>
-</dd>
-</dl>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>['data/AIA/aia_lev1_171a_2018_05_29t18_00_09_35z_image_lev1.fits']</code></pre>
-</div>
-</div>
-</div>
-</section>
-<section id="loading-data-with-sunpy" class="slide level2">
-<h2>Loading Data with <code>sunpy</code></h2>
-<div class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> sunpy.<span class="bu">map</span></span>
-<span id="cb3-2"><a href="#cb3-2"></a></span>
-<span id="cb3-3"><a href="#cb3-3"></a>m <span class="op">=</span> sunpy.<span class="bu">map</span>.Map(files)</span>
-<span id="cb3-4"><a href="#cb3-4"></a>m.peek()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell fragment" data-execution_count="5">
-<div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="slides_files/figure-revealjs/cell-6-output-1.png" width="562" height="454"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="inspecting-data-with-sunpy" class="slide level2">
-<h2>Inspecting Data with <code>sunpy</code></h2>
-<div class="cell columns column-output-location" data-execution_count="6">
-<div class="column">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="bu">print</span>(m.detector)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="bu">print</span>(m.wavelength)</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="bu">print</span>(m.date)</span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="bu">print</span>(m.observer_coordinate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column fragment">
-<div class="cell-output cell-output-stdout">
-<pre><code>AIA
-171.0 Angstrom
-2018-05-29T18:00:09.350
-&lt;SkyCoord (HeliographicStonyhurst: obstime=2018-05-29T18:00:09.350, rsun=696000.0 km): (lon, lat, radius) in (deg, deg, m)
-    (0.00562552, -0.97774891, 1.51600359e+11)&gt;</code></pre>
-</div>
-</div>
-</div>
-<div class="cell columns column-output-location" data-execution_count="7">
-<div class="column">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="im">from</span> astropy.coordinates <span class="im">import</span> SkyCoord</span>
-<span id="cb6-2"><a href="#cb6-2"></a></span>
-<span id="cb6-3"><a href="#cb6-3"></a>corner <span class="op">=</span> SkyCoord(Tx<span class="op">=-</span><span class="dv">375</span><span class="op">*</span>u.arcsec, Ty<span class="op">=</span><span class="dv">0</span><span class="op">*</span>u.arcsec,</span>
-<span id="cb6-4"><a href="#cb6-4"></a>                  frame<span class="op">=</span>m.coordinate_frame)</span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="bu">print</span>(m.world_to_pixel(corner))</span>
-<span id="cb6-6"><a href="#cb6-6"></a>m_cutout <span class="op">=</span> m.submap(corner,</span>
-<span id="cb6-7"><a href="#cb6-7"></a>                    width<span class="op">=</span><span class="dv">500</span><span class="op">*</span>u.arcsec,</span>
-<span id="cb6-8"><a href="#cb6-8"></a>                    height<span class="op">=</span><span class="dv">500</span><span class="op">*</span>u.arcsec)</span>
-<span id="cb6-9"><a href="#cb6-9"></a>m_cutout.peek()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div><div class="column fragment">
-<div class="cell-output cell-output-stdout">
-<pre><code>PixelPair(x=&lt;Quantity 1425.73662106 pix&gt;, y=&lt;Quantity 2049.01122848 pix&gt;)</code></pre>
-</div>
-<div class="cell-output cell-output-display">
-<p><img data-src="slides_files/figure-revealjs/cell-8-output-2.png" width="549" height="454"></p>
-</div>
-</div>
-</div>
-</section>
-<section id="transforming-data-with-sunpy" class="slide level2">
-<h2>Transforming Data with <code>sunpy</code></h2>
-<div class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="im">from</span> sunpy.coordinates <span class="im">import</span> propagate_with_solar_surface</span>
-<span id="cb8-2"><a href="#cb8-2"></a>m_seq <span class="op">=</span> sunpy.<span class="bu">map</span>.Map(<span class="st">'data/sequence/*.fits'</span>, sequence<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb8-3"><a href="#cb8-3"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">4</span>))</span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="cf">for</span> i, m <span class="kw">in</span> <span class="bu">enumerate</span>(m_seq):</span>
-<span id="cb8-5"><a href="#cb8-5"></a>  ax <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>, <span class="bu">len</span>(m_seq), i<span class="op">+</span><span class="dv">1</span>, projection<span class="op">=</span>m)</span>
-<span id="cb8-6"><a href="#cb8-6"></a>  m.plot(axes<span class="op">=</span>ax)</span>
-<span id="cb8-7"><a href="#cb8-7"></a>  <span class="cf">with</span> propagate_with_solar_surface():</span>
-<span id="cb8-8"><a href="#cb8-8"></a>    blc <span class="op">=</span> m_cutout.bottom_left_coord.transform_to(m.coordinate_frame)</span>
-<span id="cb8-9"><a href="#cb8-9"></a>    trc <span class="op">=</span> m_cutout.top_right_coord.transform_to(m.coordinate_frame)</span>
-<span id="cb8-10"><a href="#cb8-10"></a>  m.draw_quadrangle(blc, top_right<span class="op">=</span>trc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell fragment" data-execution_count="9">
-<div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="slides_files/figure-revealjs/cell-10-output-1.png" width="1284" height="343"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="transforming-data-with-sunpy-1" class="slide level2">
-<h2>Transforming Data with <code>sunpy</code></h2>
-<div class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb9" data-code-line-numbers="|1,2"><pre class="sourceCode numberSource python number-lines code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="cf">with</span> propagate_with_solar_surface():</span>
-<span id="cb9-2"><a href="#cb9-2"></a>  m_seq_aligned <span class="op">=</span> sunpy.<span class="bu">map</span>.Map([m.reproject_to(m_cutout.wcs) <span class="cf">for</span> m <span class="kw">in</span> m_seq], sequence<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb9-3"><a href="#cb9-3"></a>fig <span class="op">=</span> plt.figure(figsize<span class="op">=</span>(<span class="dv">16</span>, <span class="dv">4</span>))</span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="cf">for</span> i, m <span class="kw">in</span> <span class="bu">enumerate</span>(m_seq_aligned):</span>
-<span id="cb9-5"><a href="#cb9-5"></a>  ax <span class="op">=</span> fig.add_subplot(<span class="dv">1</span>,<span class="bu">len</span>(m_seq_aligned), i<span class="op">+</span><span class="dv">1</span>, projection<span class="op">=</span>m)</span>
-<span id="cb9-6"><a href="#cb9-6"></a>  m.plot(axes<span class="op">=</span>ax, cmap<span class="op">=</span><span class="st">'sdoaia171'</span>, title<span class="op">=</span>m_seq[i].date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell fragment" data-execution_count="10">
-<div class="cell-output cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure>
-<p><img data-src="slides_files/figure-revealjs/cell-11-output-1.png" width="1273" height="340"></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
+
+
 <section id="the-sunpy-project" class="slide level2" data-background-image="static/project-summary.svg">
 <h2>The SunPy Project</h2>
 </section>
@@ -831,41 +678,100 @@ Total estimated size: 67.789 Mbyte
 <section id="the-sunpy-ecosystem-1" class="slide level2">
 <h2>The SunPy Ecosystem</h2>
 <div class="r-stack">
-<div class="quarto-figure quarto-figure-center">
-<figure>
 <p><img data-src="static/ecosystem_animation/1_ecosystem_illustration.svg" class="fragment" width="2000"></p>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure>
 <p><img data-src="static/ecosystem_animation/2_ecosystem_illustration.svg" class="fragment" width="2000"></p>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure>
 <p><img data-src="static/ecosystem_animation/3_ecosystem_illustration.svg" class="fragment" width="2000"></p>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure>
 <p><img data-src="static/ecosystem_animation/4_ecosystem_illustration.svg" class="fragment" width="2000"></p>
-</figure>
-</div>
-<div class="quarto-figure quarto-figure-center">
-<figure>
 <p><img data-src="static/ecosystem_animation/5_ecosystem_illustration.svg" class="fragment" width="2000"></p>
-</figure>
-</div>
+<p><img data-src="static/ecosystem_animation/6_ecosystem_illustration.svg" class="fragment" width="2000"></p>
+<p><img data-src="static/ecosystem_animation/7_ecosystem_illustration.svg" class="fragment" width="2000"></p>
 </div>
 </section>
-<section id="why-is-this-so-important-now" class="slide level2">
+<section id="why-is-this-so-important-now" class="slide level2" data-background-image="https://smd-cms.nasa.gov/wp-content/uploads/2023/07/HelioFleet-1.jpg" data-background-size="80%">
 <h2>Why is this so important now?</h2>
-<ul>
-<li>A “Golden Age” for Solar Physics</li>
-</ul>
+<div class="footer">
+<p>Image credit: NASA Goddard Space Flight Center</p>
+</div>
 </section>
-<section id="summary" class="slide level2">
-<h2>Summary</h2>
+<section id="data-are-used-together" class="slide level2">
+<h2>…Data are Used Together</h2>
+<div class="columns">
+<div class="column" style="width:2%;">
+
+</div><div class="column" style="width:38%;">
+<p><img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Solar_orbiter_insignia.png/360px-Solar_orbiter_insignia.png"> <img data-src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Parker_Solar_Probe_insignia.png/300px-Parker_Solar_Probe_insignia.png"></p>
+<p><img data-src="https://stereo.gsfc.nasa.gov/img/stereo_logo.png" style="width:45.0%"> <img data-src="https://sdo.gsfc.nasa.gov/assets/img/site/SDO_Logo_glassy_lg.png" style="width:40.0%"></p>
+</div><div class="column" style="width:60%;">
+<p><img data-src="static/solar_mach_spacecraft_positions.png"></p>
+</div>
+</div>
+</section>
+<section id="data-are-larger" class="slide level2">
+<h2>…Data are Larger</h2>
+<div class="columns">
+<div class="column" style="width:1%;">
+
+</div><div class="column" style="width:59%;">
+<p><img data-src="https://nso1.b-cdn.net/wp-content/uploads/2019/12/DKIST-beauty-shot.jpg"></p>
+</div><div class="column" style="width:40%;">
+<div class="r-stack">
+<p><img data-src="https://nso1.b-cdn.net/wp-content/uploads/2020/12/DKIST-First-Sunspot-with-scale.jpg"></p>
+<p><img data-src="static/sunpy-affiliated-packages.png" class="fragment"></p>
+</div>
+</div>
+</div>
+
+<div class="footer">
+<p>Images courtesy National Solar Observatory</p>
+</div>
+<aside><div>
+<p>Daniel K. Inouye Solar Telescope-<strong>12 TB per day!</strong></p>
+</div></aside></section>
+<section id="data-are-more-complex" class="slide level2">
+<h2>…Data are More Complex</h2>
+<div class="columns">
+<div class="column" style="width:1%;">
+
+</div><div class="column" style="width:29%;">
+<p><img data-src="https://punch.space.swri.edu/images/punch-logo_240w.png"></p>
+</div><div class="column" style="width:70%;">
+<div class="r-stack">
+<p><img data-src="static/punch.png"></p>
+<p><img data-src="static/ndcube.png" class="fragment"></p>
+</div>
+</div>
+</div>
+<div class="footer">
+<p>Images courtesy Dan Seaton / PUNCH Instrument Team / SWRI</p>
+</div>
+
+<aside class="notes">
+<ul>
+<li>Make sure to emphasize that the tools for all of these are being built in Python</li>
+<li>And not only in Python, but they are actively participating in the ecosystem</li>
+<li>Especially PUNCH and DKIST</li>
+</ul>
+<style type="text/css">
+        span.MJX_Assistive_MathML {
+          position:absolute!important;
+          clip: rect(1px, 1px, 1px, 1px);
+          padding: 1px 0 0 0!important;
+          border: 0!important;
+          height: 1px!important;
+          width: 1px!important;
+          overflow: hidden!important;
+          display:block!important;
+      }</style></aside>
+<aside><div>
+<p>Polarimeter to Unify the Corona and Heliosphere</p>
+</div></aside></section>
+<section id="conclusion" class="slide level2">
+<h2>Conclusion</h2>
+<div class="columns">
+<div class="column" style="width:2%;">
+
+</div><div class="column" style="width:98%;">
+<h3 id="summary">Summary</h3>
 <ul>
 <li>Solar data are <strong>large, complex, and heterogenous</strong>, but hold great value in combination</li>
 <li><code>sunpy</code> is a community-developed Python package for solar data analysis</li>
@@ -878,6 +784,8 @@ Total estimated size: 67.789 Mbyte
 <li>Have you converted users to long-term contributors? How?</li>
 <li>What challenges have you faced in building a scientific software ecosystem?</li>
 </ul>
+</div>
+</div>
 
 <img src="static/sunpy_logo_landscape.png" class="slide-logo r-stretch"><div class="footer footer-default">
 <p><a href="https://wtbarnes.github.io/doepy-2024-talk">wtbarnes.github.io/doepy-2024-talk</a></p>
