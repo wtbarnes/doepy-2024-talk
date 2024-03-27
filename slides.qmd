@@ -101,9 +101,9 @@ Mg II h / IRIS Instrument Team
 :::: {.columns}
 ::: {.column width="45%"}
 ::: {.incremental}
+- Ask a "physics" question
 - Identify an event of interest
 - Combine data to answer a question
-- Where are the data?
   - {{< fa magnifying-glass size=lg >}} Search for data
   - {{< fa download size=lg >}} Download data
   - {{< fa box size=lg >}} Ingest the data
@@ -142,13 +142,13 @@ Mg II h / IRIS Instrument Team
   - Everything you need in one place
 - **Cons:**
   - Proprietary language, license fees
-  - No concept of a namespaces in IDL
+  - Development is not coordinated
   - No tests or documentation
   - No clear path to contribute
 :::
 :::
 ::: {.column width="40%"}
-![](static/ssw_screenshot.png)
+![](static/ssw_screenshot.png){.fragment}
 :::
 ::::
 
@@ -175,7 +175,7 @@ Mg II h / IRIS Instrument Team
 
 ## `sunpy`: Solar Data Analysis in Python {background-image="static/tour.svg" background-size="90%"}
 
-## Searching for Data with `sunpy`
+## Searching for Data with `sunpy` {visibility="hidden"}
 
 ```{python}
 #| echo: true
@@ -202,7 +202,7 @@ print(files)
 ```
 2. Download all FITS files corresponding to this search result to `data/AIA`.
 
-## Loading Data with `sunpy`
+## Loading Data with `sunpy` {visibility="hidden"}
 
 ```{python}
 # keeps things from falling over if the download fails (which it does often)
@@ -220,7 +220,7 @@ m = sunpy.map.Map(files)
 m.peek()
 ```
 
-## Inspecting Data with `sunpy`
+## Inspecting Data with `sunpy` {visibility="hidden"}
 
 ```{python}
 #| echo: true
@@ -245,7 +245,7 @@ m_cutout = m.submap(corner,
 m_cutout.peek()
 ```
 
-## Transforming Data with `sunpy`
+## Transforming Data with `sunpy` {visibility="hidden"}
 
 ```{python}
 #| eval: true
@@ -283,7 +283,7 @@ for i, m in enumerate(m_seq):
   m.draw_quadrangle(blc, top_right=trc)
 ```
 
-## Transforming Data with `sunpy`
+## Transforming Data with `sunpy` {visibility="hidden"}
 
 ```{python}
 #| output: true
@@ -388,29 +388,116 @@ for i, m in enumerate(m_seq_aligned):
 ## The SunPy Ecosystem
 
 ::: {.r-stack}
-![](static/ecosystem_animation/1_ecosystem_illustration.svg){.fragment width="2000px" fig-align="center"}
+![](static/ecosystem_animation/1_ecosystem_illustration.svg){.fragment width="2000px"}
 
-![](static/ecosystem_animation/2_ecosystem_illustration.svg){.fragment width="2000px" fig-align="center"}
+![](static/ecosystem_animation/2_ecosystem_illustration.svg){.fragment width="2000px"}
 
-![](static/ecosystem_animation/3_ecosystem_illustration.svg){.fragment width="2000px" fig-align="center"}
+![](static/ecosystem_animation/3_ecosystem_illustration.svg){.fragment width="2000px"}
 
-![](static/ecosystem_animation/4_ecosystem_illustration.svg){.fragment width="2000px" fig-align="center"}
+![](static/ecosystem_animation/4_ecosystem_illustration.svg){.fragment width="2000px"}
 
-![](static/ecosystem_animation/5_ecosystem_illustration.svg){.fragment width="2000px" fig-align="center"}
+![](static/ecosystem_animation/5_ecosystem_illustration.svg){.fragment width="2000px"}
+
+![](static/ecosystem_animation/6_ecosystem_illustration.svg){.fragment width="2000px"}
+
+![](static/ecosystem_animation/7_ecosystem_illustration.svg){.fragment width="2000px"}
 :::
 
-## Why is this so important now?
-- A "Golden Age" for Solar Physics
+## Why is this so important now? {background-image="https://smd-cms.nasa.gov/wp-content/uploads/2023/07/HelioFleet-1.jpg" background-size="80%"}
 
+::: {.footer}
+Image credit: NASA Goddard Space Flight Center
+:::
 
-## Summary
+## ...Data are Used Together
+
+:::: {.columns}
+::: {.column width="2%"}
+:::
+::: {.column width="38%"}
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/7/74/Solar_orbiter_insignia.png/360px-Solar_orbiter_insignia.png)
+![](https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Parker_Solar_Probe_insignia.png/300px-Parker_Solar_Probe_insignia.png)
+
+![](https://stereo.gsfc.nasa.gov/img/stereo_logo.png){width="45%"}
+![](https://sdo.gsfc.nasa.gov/assets/img/site/SDO_Logo_glassy_lg.png){width="40%"}
+:::
+::: {.column width="60%"}
+![](static/solar_mach_spacecraft_positions.png)
+:::
+::::
+
+## ...Data are Larger
+
+:::: {.columns}
+::: {.column width="1%"}
+:::
+::: {.column width="59%"}
+![](https://nso1.b-cdn.net/wp-content/uploads/2019/12/DKIST-beauty-shot.jpg)
+:::
+::: {.column width="40%"}
+::: {.r-stack}
+![](https://nso1.b-cdn.net/wp-content/uploads/2020/12/DKIST-First-Sunspot-with-scale.jpg)
+
+![](static/sunpy-affiliated-packages.png){.fragment}
+:::
+:::
+::::
+
+::: {.aside}
+Daniel K. Inouye Solar Telescope-**12 TB per day!**
+:::
+
+::: {.footer}
+Images courtesy National Solar Observatory
+:::
+
+## ...Data are More Complex
+
+:::: {.columns}
+::: {.column width="1%"}
+:::
+::: {.column width="29%"}
+![](https://punch.space.swri.edu/images/punch-logo_240w.png)
+:::
+::: {.column width="70%"}
+::: {.r-stack}
+![](static/punch.png)
+
+![](static/ndcube.png){.fragment}
+:::
+:::
+::::
+
+::: {.footer}
+Images courtesy Dan Seaton / PUNCH Instrument Team / SWRI
+:::
+
+::: {.aside}
+Polarimeter to Unify the Corona and Heliosphere
+:::
+
+::: {.notes}
+- Make sure to emphasize that the tools for all of these are being built in Python
+- And not only in Python, but they are actively participating in the ecosystem
+- Especially PUNCH and DKIST
+:::
+
+## Conclusion
+
+:::: {.columns}
+::: {.column width="2%"}
+:::
+::: {.column width="98%"}
+### Summary
+
 - Solar data are **large, complex, and heterogenous**, but hold great value in combination
 - `sunpy` is a community-developed Python package for solar data analysis
 - The SunPy Project maintains an **ecosystem** of tools for working with solar data
 - Maintaining this ecosystem is increasingly important in this **"Golden Age"**
 
 ### Questions for Panelists
-
 - How have you sustained momentum within your open-source community?
 - Have you converted users to long-term contributors? How?
 - What challenges have you faced in building a scientific software ecosystem?
+:::
+::::
