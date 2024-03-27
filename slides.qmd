@@ -1,65 +1,416 @@
 ---
-title: An Example SunPy Presentation
-subtitle: Conference / Location / Date
+title: Building an Open Source Ecosystem in a Golden Age of Solar Physics
+subtitle: DOEPy Python Exchange / 27 March 2024
 authors:
-- A. Speaker
-- B. Presenter
-- The SunPy Project
+- Will Barnes
 institute:
-- Example University
-- NASA
+- American University / NASA Goddard Space Flight Center
 format:
   revealjs:
     margin: 0
     width: 100%
     height: 100%
     theme: [default, theme/sunpy-theme.scss]
-    logo: static/sunpy_logo_landscape.svg
-    footer: "[wtbarnes.github.io/sunpy-presentation-template](https://wtbarnes.github.io/sunpy-presentation-template)"
+    logo: static/sunpy_logo_landscape.png
+    footer: "[wtbarnes.github.io/doepy-2024-talk](https://wtbarnes.github.io/doepy-2024-talk)"
 title-slide-attributes: 
   data-background-image: static/sunpy_icon.svg
   data-background-position: -100% 50%
-  data-background-opacity: 50%
+  data-background-opacity: 70%
   data-background-size: 80%
 ---
 ```{python}
 #| echo: false
 #| eval: true
 import os
+import glob
+import matplotlib.pyplot as plt
 os.environ["PARFIVE_HIDE_PROGRESS"] = "True"
 ```
 
-# The `sunpy` Package
+## Who am I? {visibility="hidden"}
 
----
+:::: {.columns}
+::: {.column width="60%"}
+- Research scientist in Washington, DC
+- PhD in solar physics
+- Day job:
+  - Scientist
+  - Software engineer
+  - Open-source maintainer
+- Converted from Matlab to Python around 10 years ago
+- Actively involved in OS communities since 2016
+- Deputy lead developer of the SunPy Project since 2019
+:::
+::: {.column width="35%"}
+::: {.r-stack}
+![](static/barnes_bio.jpeg)
+:::
+:::
+::::
 
-![](static/tour.svg){height="750"}
+# <span style="color:white;">What is solar physics?</span> {background-video="https://svs.gsfc.nasa.gov/vis/a030000/a030000/a030072/heliophysics_fleet_capture_erup_cme_1280x720.mp4" background-video-loop="true" background-video-muted="true"}
 
-## The package includes...
+::: {.notes}
+- Astronomy/astrophysics of the Sun
+- Can study our star in greater detail than any other
+- Impact on space weather on the earth
+- A laboratory for astrophysics, fundamental plasma physics, and more!
+- Primary focus is the solar atmosphere
+:::
 
-- Data search and retrieval
-- Data structures for timeseries and image data
-- Coordinate frames and conversions
-- and much more!
+# {background-image="static/corona_image.png"}
 
-## Another slide with a plot inline
+::: footer
+Image Credit: [NASA APOD/Reinhold Wittich](https://apod.nasa.gov/apod/ap230516.html)
+:::
+
+::: {.notes}
+- Humans have observed eclipses for many thousands of years
+- Corona visible to naked eye only during eclipses
+- The US will see a total solar eclipse in less than two weeks!
+- Note that temperature increases from surface to corona by many orders of magnitude
+- But why? how?
+- Why is the Corona So Hot?
+- To solve this, we don't need to wait for eclipses anymore...(lead into EUV observations)
+:::
+
+# { background-video="https://api.helioviewer.org/cache/movies/2023/07/10/1SDn5/2018_05_29_00_07_33_2018_05_30_00_02_45_AIA_171.mp4" background-video-loop="true" background-video-muted="true"}
+
+::: {.notes}
+- Magnetic field holds the key to why the corona is heated to million degree temperatures
+- Plasma trapped along field lines
+- Twisted magnetic field releases energy into the plasma, thereby heating it
+- We can start to understand this system by observing these areas of intense magnetic activity at different wavelengths as a function of time
+:::
+
+# { background-video="static/S3.mov" background-video-loop="true" background-video-muted="true" background-size="20%"}
+
+::: {.footer}
+Mg II h / IRIS Instrument Team
+:::
+
+::: {.notes}
+- Collect many different kinds of data
+- Spectra allow us to see more details: more precise temperatures, how things are moving, where things are forming
+- We observe different structures at different wavelengths
+:::
+
+## What does a solar physicist do?
+
+:::: {.columns}
+::: {.column width="45%"}
+::: {.incremental}
+- Identify an event of interest
+- Combine data to answer a question
+- Where are the data?
+  - {{< fa magnifying-glass size=lg >}} Search for data
+  - {{< fa download size=lg >}} Download data
+  - {{< fa box size=lg >}} Ingest the data
+  - {{< fa wrench size=lg >}} Transform the data
+  - {{< fa microscope size=lg >}} Analyze the data
+- {{< fa file-lines size=lg >}} Publish a paper
+- {{< fa sack-dollar size=lg >}} Profit 
+:::
+:::
+::: {.column width="55%"}
+### Challenges {.fragment}
+::: {.incremental}
+- Data are **spread** across many different providers
+- Data are often **large** 
+- Data are often very **heterogeneous**
+- Data and **metadata** must be held together
+- Complex **coordinate systems**
+:::
+::: {.fragment}
+### Solution {{< fa laptop-code size=2xl >}}
+:::
+:::
+::::
+
+## A Brief History of Software in Solar Physics
+
+:::: {.columns}
+::: {.column width="60%"}
+::: {.incremental}
+- Historically, nearly *all* software in IDL
+- SolarSoftware (SSW)--solar physicist's toolbox
+- **Pros:**
+  - Scripting language--low barrier to entry
+  - Freely available 
+  - Centrally distributed
+  - Everything you need in one place
+- **Cons:**
+  - Proprietary language, license fees
+  - No concept of a namespaces in IDL
+  - No tests or documentation
+  - No clear path to contribute
+:::
+:::
+::: {.column width="40%"}
+![](static/ssw_screenshot.png)
+:::
+::::
+
+## `sunpy`: Solar Data Analysis in Python
+
+:::: {.columns}
+::: {.column width="55%"}
+- Began in March of 2011 at NASA GSFC
+- Frustration with **licensing fees**, fragility of SSW
+- Early attempts using GDL$\to$**Python**
+- v0.1 released 9/2011
+- v1.0 in 6/2019-paper currently has **>200 citations**
+- Some early skepticism due to heritage of IDL/SSW
+- Now the **default choice**, especially for ECRs 
+- Open-source and **openly developed**–by the community, for the community
+- Built on SciPy ecosystem, especially `astropy`
+:::
+::: {.column width="45%"}
+![](static/sunpy_citations.png){.fragment}
+
+![](static/mailing-list-post.png){.fragment}
+:::
+::::
+
+## `sunpy`: Solar Data Analysis in Python {background-image="static/tour.svg" background-size="90%"}
+
+## Searching for Data with `sunpy`
 
 ```{python}
+#| echo: true
+#| output-location: column-fragment
+#| eval: true
+from sunpy.net import Fido, attrs as a
+import astropy.units as u
+
+query = Fido.search(                                 # <1>
+  a.Time('2018-05-29 18:00', '2018-05-29 18:00:10'), # <1>
+  a.Wavelength(171*u.angstrom),                      # <1>
+  a.Instrument.aia                                   # <1>
+)                                                    # <1> 
+print(query)
+```
+1. Search remote repository for AIA 171 Å images between 18:00 and 18:10 on May 29 2018.
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+#| eval: true
+files = Fido.fetch(query, path='data/{instrument}') # <2>
+print(files)
+```
+2. Download all FITS files corresponding to this search result to `data/AIA`.
+
+## Loading Data with `sunpy`
+
+```{python}
+# keeps things from falling over if the download fails (which it does often)
+if len(files) == 0:
+  files = glob.glob('data/AIA/*.fits')
+```
+
+```{python}
+#| echo: true
+#| output-location: fragment
 #| fig-align: center
 import sunpy.map
-import sunpy.data.sample
 
-m = sunpy.map.Map(sunpy.data.sample.AIA_171_IMAGE)
+m = sunpy.map.Map(files)
 m.peek()
 ```
 
-## You can also include code
+## Inspecting Data with `sunpy`
 
-The code below shows how to create a coordinate in the same frame as the map shown before.
 ```{python}
-# | echo: true
-import astropy.coordinates
-import astropy.units as u
-my_coord = astropy.coordinates.SkyCoord(Tx=300*u.arcsec, Ty=500*u.arcsec, frame=m.coordinate_frame)
-print(my_coord)
+#| echo: true
+#| output-location: column-fragment
+print(m.detector)
+print(m.wavelength)
+print(m.date)
+print(m.observer_coordinate)
 ```
+
+```{python}
+#| echo: true
+#| output-location: column-fragment
+from astropy.coordinates import SkyCoord
+
+corner = SkyCoord(Tx=-375*u.arcsec, Ty=0*u.arcsec,
+                  frame=m.coordinate_frame)
+print(m.world_to_pixel(corner))
+m_cutout = m.submap(corner,
+                    width=500*u.arcsec,
+                    height=500*u.arcsec)
+m_cutout.peek()
+```
+
+## Transforming Data with `sunpy`
+
+```{python}
+#| eval: true
+#| echo: false
+import pathlib
+import astropy.time
+if not list(pathlib.Path('data/sequence/').glob('*.fits')):
+  interval = 24*u.h
+  midpoint = astropy.time.Time('2018-05-29 18:00:00', scale='utc')
+  time_start = midpoint-interval/2
+  time_end = midpoint+interval/2
+  q = Fido.search(
+      a.Time(time_start, time_end),
+      a.Sample(6*u.h),
+      a.Wavelength(171*u.AA),
+      a.Instrument.aia,
+  )
+  file_seq = Fido.fetch(q, path='data/sequence',)
+```
+
+```{python}
+#| output: true
+#| output-location: fragment
+#| echo: true 
+#| fig-align: center
+from sunpy.coordinates import propagate_with_solar_surface
+m_seq = sunpy.map.Map('data/sequence/*.fits', sequence=True)
+fig = plt.figure(figsize=(16, 4))
+for i, m in enumerate(m_seq):
+  ax = fig.add_subplot(1, len(m_seq), i+1, projection=m)
+  m.plot(axes=ax)
+  with propagate_with_solar_surface():
+    blc = m_cutout.bottom_left_coord.transform_to(m.coordinate_frame)
+    trc = m_cutout.top_right_coord.transform_to(m.coordinate_frame)
+  m.draw_quadrangle(blc, top_right=trc)
+```
+
+## Transforming Data with `sunpy`
+
+```{python}
+#| output: true
+#| output-location: fragment
+#| echo: true 
+#| fig-align: center
+#| code-line-numbers: "|1,2"
+with propagate_with_solar_surface():
+  m_seq_aligned = sunpy.map.Map([m.reproject_to(m_cutout.wcs) for m in m_seq], sequence=True)
+fig = plt.figure(figsize=(16, 4))
+for i, m in enumerate(m_seq_aligned):
+  ax = fig.add_subplot(1,len(m_seq_aligned), i+1, projection=m)
+  m.plot(axes=ax, cmap='sdoaia171', title=m_seq[i].date)
+```
+
+## The SunPy Project {background-image="static/project-summary.svg"}
+
+## Describe a software ecosystem (an informal survey)
+
+::: {.center}
+::: {.incremental}
+- "A set of software that can be installed in the same environment"
+- "A pipedream that will never occur."
+- "Imagine a set of canals, linked together with locks. "
+- "A set of software that has enough in common to make it easy to share data between all the functionality...sharing a common programing language is neither required or sufficient"
+- ChatGPT
+  - "...a complex network of interacting software projects, developers, and organizations that build, maintain, and use a common platform or set of technologies."
+  - ELI5: "...a playground, where different computer programs, the people who make them, and the people who use them, *all play together nicely* and help each other out."
+:::
+:::
+
+## Building a Software Ecosystem
+
+::: {.incremental}
+- My proposed criteria:
+  - *open*--transparent path for adding to the ecosystem
+  - *integrated*--share common data structures and abstractions
+  - *nonduplicative*--minimize overlap in functionality
+  - *reliable*--regularly test package health and ecosystem integration
+- Challenges:
+  - **coordinating** development between groups with different interests
+  - **curating** a set of interoperable software packages
+  - **maintaining** health of ecosystem 
+:::
+
+## The SunPy Ecosystem 
+
+:::: {.columns}
+::: {.column width="2%"}
+:::
+::: {.column width="25%"}
+#### Functionality
+![](https://img.shields.io/badge/General_Package-brightgreen.svg)
+![](https://img.shields.io/badge/Specialized_Package-brightgreen.svg)
+![](https://img.shields.io/badge/Not_Relevant-red.svg)
+
+#### Integration
+![](https://img.shields.io/badge/Full_Integration-brightgreen.svg)
+![](https://img.shields.io/badge/Partial_Integration-orange.svg)
+![](https://img.shields.io/badge/No_Integration-red.svg)
+
+#### Documentation
+![](https://img.shields.io/badge/Extensive-brightgreen.svg)
+![](https://img.shields.io/badge/Good-orange.svg)
+![](https://img.shields.io/badge/Some-orange.svg)
+![](https://img.shields.io/badge/Little-red.svg)
+
+#### Testing
+![](https://img.shields.io/badge/Excellent-brightgreen.svg)
+![](https://img.shields.io/badge/Good-orange.svg)
+![](https://img.shields.io/badge/Needs_Work-red.svg)
+
+#### Duplication
+![](https://img.shields.io/badge/None-brightgreen.svg)
+![](https://img.shields.io/badge/Some-orange.svg)
+![](https://img.shields.io/badge/Major-red.svg)
+
+#### Community
+![](https://img.shields.io/badge/Excellent-brightgreen.svg)
+![](https://img.shields.io/badge/Good-orange.svg)
+![](https://img.shields.io/badge/Needs_Work-red.svg)
+
+#### Development Status
+![](https://img.shields.io/badge/Stable-brightgreen.svg)
+![](https://img.shields.io/badge/Subject_to_change-orange.svg)
+![](https://img.shields.io/badge/Low_Activity-orange.svg)
+![](https://img.shields.io/badge/Needs_Work-red.svg)
+
+:::
+::: {.column width="18%"}
+![](static/affiliated-package-review.png){.fragment}
+:::
+::: {.column width="55%"}
+:::{.r-stack}
+![](static/sunpy-affiliated-packages.png){.fragment}
+
+![](static/pyopensci-logo.png){.fragment fig-align="center"}
+:::
+:::
+::::
+
+## The SunPy Ecosystem
+
+::: {.r-stack}
+![](static/ecosystem_animation/1_ecosystem_illustration.svg){.fragment width="2000px" fig-align="center"}
+
+![](static/ecosystem_animation/2_ecosystem_illustration.svg){.fragment width="2000px" fig-align="center"}
+
+![](static/ecosystem_animation/3_ecosystem_illustration.svg){.fragment width="2000px" fig-align="center"}
+
+![](static/ecosystem_animation/4_ecosystem_illustration.svg){.fragment width="2000px" fig-align="center"}
+
+![](static/ecosystem_animation/5_ecosystem_illustration.svg){.fragment width="2000px" fig-align="center"}
+:::
+
+## Why is this so important now?
+- A "Golden Age" for Solar Physics
+
+
+## Summary
+- Solar data are **large, complex, and heterogenous**, but hold great value in combination
+- `sunpy` is a community-developed Python package for solar data analysis
+- The SunPy Project maintains an **ecosystem** of tools for working with solar data
+- Maintaining this ecosystem is increasingly important in this **"Golden Age"**
+
+### Questions for Panelists
+
+- How have you sustained momentum within your open-source community?
+- Have you converted users to long-term contributors? How?
+- What challenges have you faced in building a scientific software ecosystem?
